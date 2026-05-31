@@ -482,11 +482,3 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-
-# ML.NET model artifacts
-Models/**
-!Models/
-!Models/HalfAnnotated/
-!Models/HalfAnnotated/.gitignore
-!Models/FullyAnnotated/
-!Models/FullyAnnotated/.gitignore
