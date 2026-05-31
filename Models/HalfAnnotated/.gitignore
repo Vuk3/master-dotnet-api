@@ -1,0 +1,4 @@
+# Half-annotated ML.NET model artifacts go here.
+# Keep generated model binaries out of git.
+*
+!.gitignore
