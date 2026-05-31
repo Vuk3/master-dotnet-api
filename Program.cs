@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,27 +23,26 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseDeveloperExceptionPage();
 
 // Postavljamo /predict kao POST endpoint
-app.MapPost("/predict", async (IFormFile file) =>
+
+app.MapPost("/predict", async ([FromForm] IFormFile file) =>
 {
     if (file == null || file.Length == 0)
-    {
         return Results.BadRequest("No file uploaded.");
-    }
 
-    // Dummy response for testing
-    return Results.Ok(new { message = "Prediction result from .NET API", fileName = file.FileName });
+    await Task.CompletedTask;
+    return Results.Problem(
+        title: "Predict unavailable",
+        detail: "ML.NET model and generated prediction files were removed.",
+        statusCode: StatusCodes.Status501NotImplemented
+    );
 })
+.DisableAntiforgery()
 .WithName("Predict")
 .WithOpenApi();
 
-// Postavljamo /health kao GET endpoint
 app.MapGet("/health", () =>
 {
     return Results.Ok("Ok from DOTNET");
@@ -50,8 +51,3 @@ app.MapGet("/health", () =>
 .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
