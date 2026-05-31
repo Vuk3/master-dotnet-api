@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using dotnet_api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,29 +25,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseDeveloperExceptionPage();
 
-// Postavljamo /predict kao POST endpoint
-
-app.MapPost("/predict", async ([FromForm] IFormFile file) =>
-{
-    if (file == null || file.Length == 0)
-        return Results.BadRequest("No file uploaded.");
-
-    await Task.CompletedTask;
-    return Results.Problem(
-        title: "Predict unavailable",
-        detail: "ML.NET model and generated prediction files were removed.",
-        statusCode: StatusCodes.Status501NotImplemented
-    );
-})
-.DisableAntiforgery()
-.WithName("Predict")
-.WithOpenApi();
-
-app.MapGet("/health", () =>
-{
-    return Results.Ok("Ok from DOTNET");
-})
-.WithName("Health")
-.WithOpenApi();
+app.MapHealthEndpoints();
+app.MapPredictionEndpoints();
 
 app.Run();
