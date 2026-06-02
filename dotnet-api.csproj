@@ -7,6 +7,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.ImageAnalytics" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.TorchSharp" Version="0.21.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="TorchSharp-cuda-windows" Version="0.101.5" />
+  </ItemGroup>
+  <ItemGroup Label="HalfAnnotatedModel">
+    <None Include="Models\HalfAnnotated\HalfAnnotatedModel.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

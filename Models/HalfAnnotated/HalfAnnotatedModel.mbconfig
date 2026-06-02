@@ -1,0 +1,88 @@
+﻿{
+  "Scenario": "ObjectDetection",
+  "DataSource": {
+    "Version": 0,
+    "Type": "Coco",
+    "FilePath": "C:\\Users\\Vuk\\Desktop\\Master rad\\Datasets\\Master Half Annotated.coco\\train\\_annotations.coco.json"
+  },
+  "Environment": {
+    "Type": "LocalGPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 3,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "ObjectDetectionMulti",
+        "Score": 0.27297964692115784,
+        "RuntimeInSeconds": 115879.123,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3",
+          "e0": {
+            "OutputColumnName": "Labels",
+            "InputColumnName": "Labels",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "Image",
+            "InputColumnName": "Image",
+            "ImageHeight": 640,
+            "ImageWidth": 640,
+            "CropAnchor": "Center",
+            "Resizing": "IsoPad"
+          },
+          "e2": {
+            "LabelColumnName": "Labels",
+            "PredictedLabelColumnName": "PredictedLabel",
+            "PredictedBoundingBoxColumnName": "PredictedBoundingBoxes",
+            "BoundingBoxColumnName": "Box",
+            "ImageColumnName": "Image",
+            "ScoreColumnName": "score",
+            "MaxEpoch": 50,
+            "InitLearningRate": 1.0,
+            "WeightDecay": 0.0,
+            "IOUThreshold": 0.5,
+            "ScoreThreshold": 0.34999999403953552
+          },
+          "e3": {
+            "OutputColumnName": "PredictedLabel",
+            "InputColumnName": "PredictedLabel"
+          }
+        }
+      }
+    ],
+    "Estimators": {
+      "e0": "MapValueToKey",
+      "e1": "ResizeImages",
+      "e2": "ObjectDetectionMulti",
+      "e3": "MapKeyToValue"
+    },
+    "Schema": "e0 * e1 * e2 * e3",
+    "MetricName": "mAP50_95",
+    "ModelFilePath": "C:\\Users\\Vuk\\Desktop\\Master rad\\master-dotnet-api\\Models\\HalfAnnotated\\HalfAnnotatedModel.mlnet"
+  },
+  "Type": "TrainingConfig",
+  "Version": 5,
+  "TrainingOption": {
+    "Version": 0,
+    "Type": "ObjectDetectionTrainingOption",
+    "TrainingTime": 0,
+    "Epoch": 50,
+    "ScoreThreshold": 0.35,
+    "IOUThreshold": 0.5,
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "TrainValidateSplitValidationOption",
+      "SplitRatio": 0.2
+    },
+    "ResizeOption": {
+      "Version": 0,
+      "Type": "Resize",
+      "Width": 640,
+      "Height": 640
+    }
+  }
+}
