@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using dotnet_api.Services;
 
 namespace dotnet_api.Endpoints;
 
@@ -6,20 +7,19 @@ public static class PredictionEndpoints
 {
     public static WebApplication MapPredictionEndpoints(this WebApplication app)
     {
-        app.MapPost("/predict", async ([FromForm] IFormFile file) =>
+        app.MapPost("/predict", async (
+            [FromForm] IFormFile file,
+            HalfAnnotatedPredictionService predictionService
+        ) =>
         {
             if (file == null || file.Length == 0)
             {
                 return Results.BadRequest("No file uploaded.");
             }
 
-            await Task.CompletedTask;
+            var prediction = await predictionService.Predict(file);
 
-            return Results.Problem(
-                title: "Predict unavailable",
-                detail: "ML.NET model and generated prediction files were removed.",
-                statusCode: StatusCodes.Status501NotImplemented
-            );
+            return Results.Ok(prediction);
         })
         .DisableAntiforgery()
         .WithName("Predict")

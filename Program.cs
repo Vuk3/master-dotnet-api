@@ -1,4 +1,5 @@
 using dotnet_api.Endpoints;
+using dotnet_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<HalfAnnotatedPredictionService>();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -27,5 +29,8 @@ app.UseDeveloperExceptionPage();
 
 app.MapHealthEndpoints();
 app.MapPredictionEndpoints();
+
+var predictionService = app.Services.GetRequiredService<HalfAnnotatedPredictionService>();
+_ = Task.Run(predictionService.WarmUp);
 
 app.Run();
