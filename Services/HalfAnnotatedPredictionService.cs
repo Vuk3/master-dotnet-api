@@ -7,13 +7,17 @@ namespace dotnet_api.Services;
 
 public class HalfAnnotatedPredictionService
 {
-    private const string ModelName = "mlnet";
     private readonly ILogger<HalfAnnotatedPredictionService> logger;
+    private readonly DotnetModelCatalogService modelCatalogService;
     private readonly object predictionLock = new();
 
-    public HalfAnnotatedPredictionService(ILogger<HalfAnnotatedPredictionService> logger)
+    public HalfAnnotatedPredictionService(
+        ILogger<HalfAnnotatedPredictionService> logger,
+        DotnetModelCatalogService modelCatalogService
+    )
     {
         this.logger = logger;
+        this.modelCatalogService = modelCatalogService;
     }
 
     public void WarmUp()
@@ -37,7 +41,7 @@ public class HalfAnnotatedPredictionService
         }
     }
 
-    public async Task<PredictionResponse> Predict(IFormFile file)
+    public async Task<PredictionResponse> Predict(IFormFile file, string? modelId)
     {
         await using var imageStream = new MemoryStream();
         await file.CopyToAsync(imageStream);
@@ -55,8 +59,12 @@ public class HalfAnnotatedPredictionService
             output = HalfAnnotatedModel.Predict(input);
         }
 
+        var selectedModel = modelCatalogService.GetModel(modelId);
+
         return new PredictionResponse(
-            ModelName,
+            selectedModel?.Name ?? "ML.NET Object Detection",
+            selectedModel?.Id,
+            selectedModel?.AnnotationType,
             image.Width,
             image.Height,
             MapDetections(output, image.Width, image.Height),

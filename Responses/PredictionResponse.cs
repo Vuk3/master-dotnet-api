@@ -25,6 +25,10 @@ public record DetectionResponse(
 public record PredictionResponse(
     [property: JsonPropertyName("model")]
     string Model,
+    [property: JsonPropertyName("modelId")]
+    string? ModelId,
+    [property: JsonPropertyName("annotationType")]
+    string? AnnotationType,
     [property: JsonPropertyName("imageWidth")]
     int ImageWidth,
     [property: JsonPropertyName("imageHeight")]

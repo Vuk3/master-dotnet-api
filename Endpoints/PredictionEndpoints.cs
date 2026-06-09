@@ -9,6 +9,8 @@ public static class PredictionEndpoints
     {
         app.MapPost("/predict", async (
             [FromForm] IFormFile file,
+            [FromForm] string? model,
+            DotnetModelCatalogService modelCatalogService,
             HalfAnnotatedPredictionService predictionService
         ) =>
         {
@@ -17,7 +19,12 @@ public static class PredictionEndpoints
                 return Results.BadRequest("No file uploaded.");
             }
 
-            var prediction = await predictionService.Predict(file);
+            if (!modelCatalogService.IsKnownModel(model))
+            {
+                return Results.BadRequest("Requested .NET model was not found.");
+            }
+
+            var prediction = await predictionService.Predict(file, model);
 
             return Results.Ok(prediction);
         })
