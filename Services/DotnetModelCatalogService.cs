@@ -66,7 +66,12 @@ public class DotnetModelCatalogService
             return Array.Empty<ModelOptionResponse>();
         }
 
-        var defaultModelPath = modelPaths[0];
+        var defaultModelPath = modelPaths.FirstOrDefault(path =>
+            GetModelId(modelsRoot, path).Equals(
+                "fullyannotated/fullyannotatedmodel",
+                StringComparison.OrdinalIgnoreCase
+            )
+        ) ?? modelPaths[0];
 
         return modelPaths
             .Select(path => CreateModelSummary(modelsRoot, path, path == defaultModelPath))
@@ -83,11 +88,28 @@ public class DotnetModelCatalogService
 
         return new ModelOptionResponse(
             GetModelId(modelsRoot, modelPath),
-            "ML.NET Object Detection",
+            GetModelName(annotationType),
             "ML.NET Model Builder",
             annotationType,
             isDefault
         );
+    }
+
+    private static string GetModelName(string annotationType)
+    {
+        if (annotationType.Equals("default", StringComparison.OrdinalIgnoreCase))
+        {
+            return "ML.NET Object Detection";
+        }
+
+        var displayAnnotationType = string.Join(
+            " ",
+            annotationType
+                .Split('-', StringSplitOptions.RemoveEmptyEntries)
+                .Select(word => char.ToUpperInvariant(word[0]) + word[1..])
+        );
+
+        return $"ML.NET Object Detection - {displayAnnotationType}";
     }
 
     private static string GetModelId(string modelsRoot, string modelPath)

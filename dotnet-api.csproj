@@ -13,8 +13,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="TorchSharp-cuda-windows" Version="0.101.5" />
   </ItemGroup>
-  <ItemGroup Label="HalfAnnotatedModel">
+  <ItemGroup Label="MLNetModels">
     <None Include="Models\HalfAnnotated\HalfAnnotatedModel.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Models\FullyAnnotated\FullyAnnotatedModel.mlnet">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

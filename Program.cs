@@ -1,5 +1,26 @@
+using dotnet_api.Evaluation;
 using dotnet_api.Endpoints;
 using dotnet_api.Services;
+using Microsoft.Extensions.Logging.Abstractions;
+
+if (
+    EvaluationCommand.IsEvaluationCommand(args)
+    || EvaluationCommand.IsPredictionWorkerCommand(args)
+    || EvaluationCommand.IsPredictionBatchWorkerCommand(args)
+)
+{
+    var modelCatalogService = new DotnetModelCatalogService();
+    var evaluationPredictionService = new MlnetPredictionService(
+        NullLogger<MlnetPredictionService>.Instance,
+        modelCatalogService
+    );
+    Environment.ExitCode = EvaluationCommand.IsPredictionBatchWorkerCommand(args)
+        ? EvaluationCommand.RunPredictionBatchWorker(evaluationPredictionService, args.Skip(1).ToArray())
+        : EvaluationCommand.IsPredictionWorkerCommand(args)
+            ? EvaluationCommand.RunPredictionWorker(evaluationPredictionService, args.Skip(1).ToArray())
+            : EvaluationCommand.Run(evaluationPredictionService, args.Skip(1).ToArray());
+    return;
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DotnetModelCatalogService>();
-builder.Services.AddSingleton<HalfAnnotatedPredictionService>();
+builder.Services.AddSingleton<MlnetPredictionService>();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -32,7 +53,7 @@ app.MapHealthEndpoints();
 app.MapModelEndpoints();
 app.MapPredictionEndpoints();
 
-var predictionService = app.Services.GetRequiredService<HalfAnnotatedPredictionService>();
+var predictionService = app.Services.GetRequiredService<MlnetPredictionService>();
 _ = Task.Run(predictionService.WarmUp);
 
 app.Run();

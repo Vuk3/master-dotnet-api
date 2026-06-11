@@ -11,7 +11,7 @@ public static class PredictionEndpoints
             [FromForm] IFormFile file,
             [FromForm] string? model,
             DotnetModelCatalogService modelCatalogService,
-            HalfAnnotatedPredictionService predictionService
+            MlnetPredictionService predictionService
         ) =>
         {
             if (file == null || file.Length == 0)
