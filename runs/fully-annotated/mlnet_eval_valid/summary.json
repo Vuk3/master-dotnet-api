@@ -1,0 +1,29 @@
+﻿{
+  "images": 290,
+  "skippedImages": 0,
+  "predictionFailures": 0,
+  "groundTruthBoxes": 1787,
+  "predictions": 2035,
+  "iouThreshold": 0.5,
+  "confusionConfidenceThreshold": 0.25,
+  "modelId": "fullyannotated/fullyannotatedmodel",
+  "bestF1": 0.7780165796745472,
+  "bestF1Confidence": 0.86,
+  "map50": 0.7479551740393432,
+  "groundTruthByClass": {
+    "Gloves": 269,
+    "Helmet": 331,
+    "No-Gloves": 384,
+    "No-Helmet": 221,
+    "No-Vest": 354,
+    "Vest": 228
+  },
+  "predictionsByClass": {
+    "Gloves": 339,
+    "Helmet": 375,
+    "No-Gloves": 364,
+    "No-Helmet": 237,
+    "No-Vest": 464,
+    "Vest": 256
+  }
+}

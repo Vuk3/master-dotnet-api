@@ -1,0 +1,8 @@
+﻿predicted/true,Gloves,Helmet,No-Gloves,No-Helmet,No-Vest,Vest,background
+Gloves,192,2,15,0,1,0,129
+Helmet,0,282,0,14,0,2,77
+No-Gloves,4,1,213,2,1,0,143
+No-Helmet,0,2,1,171,0,0,63
+No-Vest,0,2,0,0,316,14,132
+Vest,0,1,0,0,5,189,61
+background,73,41,155,34,31,23,0
